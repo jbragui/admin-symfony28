@@ -8,6 +8,7 @@ class Util
     public function thumbnail($root,$archivo, $thumb_width=0, $thumb_height=0)
     {
         try {
+            ini_set('memory_limit', '4096M');
             $base = realpath($root.'/../web/');
 
             if ( !is_numeric($thumb_width) ) $thumb_width = 100;
@@ -286,7 +287,9 @@ class Util
             'image/png',
             'image/bmp',
             'image/ico',
-
+            'image/svg+xml',
+            'application/svg+xml'
+            
             'application/pdf'
         );
     }
