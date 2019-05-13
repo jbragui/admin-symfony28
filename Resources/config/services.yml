@@ -1,0 +1,115 @@
+services:
+    # KernelRequest listener
+    extension.listener:
+        class: Core\ZeroBundle\Listener\DoctrineExtensionListener
+        calls:
+            - [ setContainer, [ "@service_container" ] ]
+        tags:
+            # translatable sets locale after router processing
+            - { name: kernel.event_listener, event: kernel.request, method: onLateKernelRequest, priority: -10 }
+            # loggable hooks user username if one is in security context
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            # translatable sets locale such as default application locale before command execute
+            - { name: kernel.event_listener, event: console.command, method: onConsoleCommand, priority: -10 }
+
+
+    # Doctrine Extension listeners to handle behaviors
+    gedmo.listener.tree:
+        class: Gedmo\Tree\TreeListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.translatable:
+        class: Gedmo\Translatable\TranslatableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+            - [ setDefaultLocale, [ %locale% ] ]
+            - [ setTranslationFallback, [ true ] ]
+
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.sluggable:
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.sortable:
+        class: Gedmo\Sortable\SortableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.loggable:
+        class: Gedmo\Loggable\LoggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    core.twig.database_globals_extension:
+        class: Core\ZeroBundle\Twig\GlobalsExtension
+        arguments:
+            - @service_container
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+    # FILTER
+    core.twig.extension.youtube:
+        class: Core\ZeroBundle\Twig\YoutubeExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.geolocation:
+        class: Core\ZeroBundle\Twig\GeoLocationExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.meses:
+        class: Core\ZeroBundle\Twig\MesesExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.thumbnail:
+        class: Core\ZeroBundle\Twig\ThumbnailExtension
+        arguments:
+            - @service_container
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.chunk:
+        class: Core\ZeroBundle\Twig\ChunkExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.fileext:
+        class: Core\ZeroBundle\Twig\FileextExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.solonumeros:
+        class: Core\ZeroBundle\Twig\SolonumerosExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.translate:
+        class: Core\ZeroBundle\Twig\TranslateExtension
+        arguments:
+            doctrine: "@doctrine"
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.metatags:
+        class: Core\ZeroBundle\Twig\MetatagsExtension
+        arguments:
+            doctrine: "@doctrine"
+        tags:
+            - { name: twig.extension }

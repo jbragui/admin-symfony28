@@ -1,0 +1,50 @@
+{% spaceless %}
+<div class="getsidebar hide">
+    {% if zeroconfig.sidebar is defined %}
+    <ul class="sidebar-menu control-ajax">
+        <li class="{% if app.request.get('_route') == 'zerobundle_admin_dashboard' %}active{% endif %}">
+            <a href="{{ path('zerobundle_admin_dashboard') }}" class="model-dashboard">
+                <i class='fa fa-home'></i> <span>Escritorio</span>
+            </a>
+        </li>
+        {% for row in zeroconfig.sidebar %}
+            {% if row.type is defined and row.type == 'tree' %}
+                {% set conjunto_path = [] %}
+                {% for key in row.interno|keys %}
+                    {% set url_path = 'zerobundle_admin_'~key|lower %}
+                    {% set conjunto_path = [url_path, url_path~'_new', url_path~'_show', url_path~'_edit', url_path~'_delete']|merge(conjunto_path) %}
+                {% endfor %}
+                <li class="treeview {% if app.request.get('_route') in conjunto_path %}active{% endif %}">
+                    <a href="#">
+                        <i class='fa fa-{{ row.ico|default('terminal') }}'></i>
+                        <span> {{ row.label }}</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu {% if app.request.get('_route') in conjunto_path %}menu-open{% endif %}">
+                        {% for key,sub in row.interno %}
+                            {% set url_path = 'zerobundle_admin_'~key|lower %}
+                            {% set conjunto_path = [url_path, url_path~'_new', url_path~'_show', url_path~'_edit', url_path~'_delete'] %}
+                            <li class="{% if app.request.get('_route') in conjunto_path %}active{% endif %}">
+                                <a href="{{ path(conjunto_path|first) }}" class="model-{{ key }}">
+                                    <i class="fa fa-{{ sub.ico|default('terminal') }}"></i>
+                                    <span> {{ sub.label|default(key) }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                {% set url_path = 'zerobundle_admin_'~row.model|lower %}
+                {% set conjunto_path = [url_path, url_path~'_new', url_path~'_show', url_path~'_edit', url_path~'_delete'] %}
+                <li class="{% if app.request.get('_route') in conjunto_path %}active{% endif %}">
+                    <a href="{{ path(conjunto_path|first) }}" class="model-{{ row.model }}">
+                        <i class='fa fa-{{ row.ico|default('terminal') }}'></i>
+                        <span> {{ row.label|default(row.model) }}</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endspaceless %}

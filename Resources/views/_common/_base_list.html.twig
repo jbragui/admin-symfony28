@@ -1,0 +1,62 @@
+{% set base_template =
+    (app.request.query.get('ajax') == 'true') ?
+    'CoreZeroBundle:_common:_base_for_ajax.html.twig' :
+    'CoreZeroBundle:_common:_base.html.twig'
+    %}
+
+{% extends base_template %}
+
+{% set ROUTER_NAME = app.request.attributes.get('_route') %}
+{% set titulo = 'Listado'%}
+
+{% block adicional_html %}
+<script type="text/javascript">
+    setTimeout(function(){
+        $('.DataTable').DataTable( {
+            language: {
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            "order": []
+        } );
+        var pathname = window.location.pathname,
+            pathname_orig = '{{ path(app.request.attributes.get('_route')) }}';
+
+        if ( pathname != pathname_orig ) {
+            history.pushState(null, null, pathname_orig);
+        }
+    }, 100);
+</script>
+{% endblock %}
+
+{% block body -%}
+{% if entities %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            {% block form_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

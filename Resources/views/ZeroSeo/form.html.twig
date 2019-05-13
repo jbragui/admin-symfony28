@@ -1,0 +1,37 @@
+{% if zeroconfig.locales|length == 0 %}
+    {% set toolbars_locales = false %}
+{% endif %}
+
+{% extends 'CoreZeroBundle:_common:_base_form.html.twig' %}
+
+{% block form_button %}
+{% endblock %}
+
+{% block form_content -%}
+<div class="col-md-12">
+    <div class="box box-primary">
+        <div class="box-body">
+            {{ form_row(form.path) }}
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Contenido principal</h3>
+        </div>
+        <div class="box-body">
+            {{ form_row(form.titulo) }}
+            {{ form_row(form.descripcion) }}
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Contenido en redes sociales</h3>
+        </div>
+        <div class="box-body">
+            {{ form_row(form.socialTitulo) }}
+            {{ form_row(form.socialDescripcion) }}
+            {{ form_row(form.socialImagen) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

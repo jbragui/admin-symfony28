@@ -1,0 +1,83 @@
+{% block css_adicional %}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block body %}
+    <div class="row" id="content-form">
+        {{ form_start(form, {'attr': {'id':'form-zero', 'novalidate': 'novalidate'}}) }}
+        {% block form_content %}{% endblock %}
+        <div class="col-md-12" id="form-bloque-botones">
+            <div class="box">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            {{ form_widget(form.submit) }}
+                            {% if form.submit2 is defined %}
+                                {{ form_widget(form.submit2) }}
+                            {% endif %}
+                            {% if form.submit3 is defined %}
+                                {{ form_widget(form.submit3) }}
+                            {% endif %}
+                            {% if delete_form is defined %}
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#FORM_DELETE">
+                                    <i class="fa fa-trash"></i>
+                                    <span class="hidden-xs"> Eliminar</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+        if (window.jQuery) {
+            $footer = $('#form-bloque-botones');
+            CKEDITOR.on("instanceReady", function(event)
+            {
+                $(window).ready(h).resize(h).scroll(h);
+            });
+            $('.collection').collection({
+                up: '<a href="#" class="btn btn-default"><span class="fa fa-arrow-up"></span></a>',
+                down: '<a href="#" class="btn btn-default"><span class="fa fa-arrow-down"></span></a>',
+                add: '<a href="#" class="btn btn-default"><span class="fa fa-plus-circle"></span></a>',
+                remove: '<a href="#" class="btn btn-default"><span class="fa fa-trash"></span></a>'
+            });
+
+            setTimeout(function(){
+                $(window).ready(h).resize(h).scroll(h);
+            }, 100);
+        }
+        </script>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block adicional_html %}
+{% if delete_form is defined %}
+<div class="modal modalnoajax fade" id="FORM_DELETE" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Eliminar</h4>
+            </div>
+            <div class="modal-body">
+                ¿Esta seguro que desea eliminar esta información?
+            </div>
+            <div class="modal-footer">
+                {{ form_start(delete_form) }}
+                    {{ form_widget(delete_form.submit, {'label': 'Definitivamente','attr': {'class': 'btn btn-danger'}} ) }}
+                    <a class="btn btn-default" data-dismiss="modal">Cancelar</a>
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

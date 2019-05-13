@@ -1,0 +1,49 @@
+
+{% include 'CoreZeroBundle:_common:_locales.html.twig' %}
+{% include 'CoreZeroBundle:_common:_sidebar.html.twig' %}
+
+<script type="text/javascript">
+    if (window.jQuery) {
+        setTimeout(function(){
+            $('.navbar-nav.locales').html($('.getlocales').html());
+            $('section.sidebar').html($('.getsidebar').html());
+
+            {% for tag, line in app.session.flashbag.all %}
+                {% for underline in line %}
+                    new PNotify({
+                        text: '{{ underline }}',
+                        type: '{{ tag }}',
+                        icon: false
+                    });
+                {% endfor %}
+            {% endfor %}
+        }, 100);
+    }
+</script>
+
+{% if not cabecera is defined or cabecera == 'true' %}
+<section class="content-header">
+    <div class="sticky-wrapper">
+        <nav role="navigation" class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <span class="navbar-brand"> {{ titulo|default('Administrador') }} </span>
+                </div>
+                <div class="navbar-collapse control-ajax">
+                    <div class="navbar-left"></div>
+                    {% block form_button %}{% endblock %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    {% block breadcrumb %}{% endblock %}
+</section>
+{% endif %}
+
+<section class="content" id="guts">
+    {% block body %}{% endblock %}
+</section>
+
+{% block adicional_html %}{% endblock %}
+
+{% block javascript %}{% endblock %}

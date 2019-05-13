@@ -1,0 +1,13 @@
+<div class="getlocales hide">
+    {% if toolbars_locales is not defined %}
+        {% set toolbars_locales = true %}
+    {% endif %}
+    {% if toolbars_locales != false %}
+        {% for locale in zeroconfig.locales %}
+            <li class="control-ajax {% if app.request.locale == locale %} open {% endif %} lang {{ locale }}" data-lang="{{ locale }}">
+                {% set path_url_translate = path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')|merge({'_locale':locale})) %}
+                <a href="{{ path_url_translate }}">{{ locale|upper }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+</div>

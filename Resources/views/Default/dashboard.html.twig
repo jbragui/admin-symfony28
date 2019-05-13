@@ -1,0 +1,111 @@
+{% set base_template =
+    (app.request.query.get('ajax') == 'true') ?
+    'CoreZeroBundle:_common:_base_for_ajax.html.twig' :
+    'CoreZeroBundle:_common:_base.html.twig'
+    %}
+{% extends base_template %}
+
+{% block body %}
+{#
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><div id="embed-api-auth-container"></div></h3>
+  </div>
+  <div class="panel-body">
+      <div id="chart-container"></div>
+  </div>
+  <div class="panel-footer">
+      <div id="view-selector-container"></div>
+  </div>
+</div>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script>
+(function(w,d,s,g,js,fjs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
+<script>
+
+gapi.analytics.ready(function() {
+
+    function setSignedInState() {
+        document.body.classList.remove('is-needingAuthorization');
+        document.body.classList.add('is-authorized');
+      }
+
+      function setSignedOutState() {
+        document.body.classList.remove('is-authorized');
+        document.body.classList.add('is-needingAuthorization');
+      }
+
+      function setNeedsAuthorizingState() {
+        document.body.classList.add('is-needingAuthorization');
+      }
+
+      gapi.analytics.auth.on('signIn', setSignedInState);
+      gapi.analytics.auth.on('signOut', setSignedOutState);
+      gapi.analytics.auth.once('needsAuthorization', setNeedsAuthorizingState);
+      gapi.analytics.auth.once('error', setNeedsAuthorizingState);
+
+  /**
+   * Authorize the user immediately if the user has already granted access.
+   * If no access has been created, render an authorize button inside the
+   * element with the ID "embed-api-auth-container".
+   */
+   var CLIENT_ID = '432121036743-ck85mf0hu8lpdlov1gbi7jc3t3qvsffj.apps.googleusercontent.com';
+  gapi.analytics.auth.authorize({
+    container: 'embed-api-auth-container',
+    clientid: CLIENT_ID
+  });
+
+
+  /**
+   * Create a new ViewSelector instance to be rendered inside of an
+   * element with the id "view-selector-container".
+   */
+  var viewSelector = new gapi.analytics.ViewSelector({
+    container: 'view-selector-container'
+  });
+
+  // Render the view selector to the page.
+  viewSelector.execute();
+
+
+  /**
+   * Create a new DataChart instance with the given query parameters
+   * and Google chart options. It will be rendered inside an element
+   * with the id "chart-container".
+   */
+  var dataChart = new gapi.analytics.googleCharts.DataChart({
+    query: {
+      metrics: 'ga:sessions',
+      dimensions: 'ga:date',
+      'start-date': '30daysAgo',
+      'end-date': 'yesterday'
+    },
+    chart: {
+      container: 'chart-container',
+      type: 'LINE',
+      options: {
+        width: '100%'
+      }
+    }
+  });
+
+
+  /**
+   * Render the dataChart on the page whenever a new view is selected.
+   */
+  viewSelector.on('change', function(ids) {
+    dataChart.set({query: {ids: ids}}).execute();
+  });
+
+});
+</script>
+#}
+{% endblock %}

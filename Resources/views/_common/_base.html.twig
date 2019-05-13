@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Administrador</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% set version_asset = '?v=1.13' %}
+
+    <link rel="stylesheet" href="{{ asset('bundles/corezero/css/total.css')~version_asset }}" rel="stylesheet" type="text/css"/>
+
+    {% block css_adicional %}{% endblock %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="skin-black sidebar-mini">
+    {% include 'CoreZeroBundle:Modal:filebrowser.html.twig' %}
+    {% include 'CoreZeroBundle:Modal:warning.html.twig' %}
+    {% include 'CoreZeroBundle:Modal:fos.html.twig' %}
+
+    <script src="{{ url('zerobundle_admin_api_main_js')~version_asset }}"></script>
+    <script src="{{ asset('bundles/corezero/ckeditor/ckeditor.js')~version_asset }}"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key={{ zeroconfig.api_key_maps }}"></script>
+    <script src="{{ asset('bundles/corezero/js/total.js')~version_asset }}"></script>
+    <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+
+    {% for row in zeroconfig.js_externo %}
+    <script src="{{ row }}"></script>
+    {% endfor %}
+    {% for row in zeroconfig.js_interno %}
+    <script src="{{ asset(row)~version_asset }}"></script>
+    {% endfor %}
+
+    <div class="wrapper" id="page-wrap">
+        <header class="main-header">
+            <a href="{{ path('zerobundle_admin_dashboard') }}" class="logo{% if zeroconfig.logo_interno != '' %} img{% endif %}">
+                {% if zeroconfig.logo_interno != '' %}
+                    <img src="{{ asset(zeroconfig.logo_interno) }}" alt="">
+                {% else %}
+                    <span class="logo-mini"><b>staff</b></span>
+                    <span class="logo-lg"><b>staff<span style="color: rgb(128,174,26);">{{ zeroconfig.title|lower }}</span></b></span>
+                {% endif %}
+            </a>
+
+            <nav class="navbar navbar-static-top" role="navigation">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav locales">
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{{ asset('bundles/corezero/img/profile.jpg') }}" class="user-image" alt="User Image"/>
+                                <span class="hidden-xs">{{ app.user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ path('zerobundle_admin_changepassword') }}" id="FOSChangePasswordButton">
+                                        <i class="fa fa-key"></i> Cambiar Contraseña
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('zerobundle_admin_security_logout') }}">
+                                        <i class="fa fa-sign-out"></i> Desconectar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <div id="main-content">
+                {% include 'CoreZeroBundle:_common:_locales.html.twig' %}
+                {% include 'CoreZeroBundle:_common:_sidebar.html.twig' %}
+
+                <script type="text/javascript">
+                    if (window.jQuery) {
+                        $('.navbar-nav.locales').html($('.getlocales').html());
+                        $('section.sidebar').html($('.getsidebar').html());
+
+                        {% for tag, line in app.session.flashbag.all %}
+                            {% for underline in line %}
+                                new PNotify({
+                                    text: '{{ underline }}',
+                                    type: '{{ tag }}',
+                                    icon: false
+                                });
+                            {% endfor %}
+                        {% endfor %}
+                    }
+                </script>
+
+                {% if not cabecera is defined or cabecera == 'true' %}
+                <section class="content-header">
+                    <div class="sticky-wrapper">
+                        <nav role="navigation" class="navbar navbar-default">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <span class="navbar-brand"> {{ titulo|default('Administrador') }} </span>
+                                </div>
+                                <div class="navbar-collapse control-ajax">
+                                    <div class="navbar-left"></div>
+                                    {% block form_button %}{% endblock %}
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    {% block breadcrumb %}{% endblock %}
+                </section>
+                {% endif %}
+
+                <section class="content" id="guts">
+                    {% block body %}{% endblock %}
+                </section>
+
+                {% block adicional_html %}{% endblock %}
+
+                {% block javascript %}{% endblock %}
+            </div>
+        </div>
+        <footer class="main-footer">
+            <strong>Copyright &copy; {{ 'today'|date('Y') }} <a href="http://www.staff{{ zeroconfig.title|lower }}.pe" target="_blank">staff{{ zeroconfig.title|lower }}</a>.</strong> All rights reserved.
+        </footer>
+        <div class='control-sidebar-bg'></div>
+    </div>
+</body>
+</html>

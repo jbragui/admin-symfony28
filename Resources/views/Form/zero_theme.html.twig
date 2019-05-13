@@ -1,0 +1,122 @@
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{%- block ckeditor_widget -%}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+
+    {% if attr.toolbar is defined and attr.toolbar != '' %}
+        <script type="text/javascript">
+            {% set toolbar = attr.toolbar == 'simple' ? '"Bold"':attr.toolbar %}
+            if( typeof(CKEDITOR) != "undefined" ){
+                CKEDITOR.replace( '{{ id }}', {"height":100,"toolbar":[[{{ toolbar|raw }}]]});
+            }
+        </script>
+    {% else %}
+        <script type="text/javascript">
+            if( typeof(CKEDITOR) != "undefined" ){
+                CKEDITOR.replace( '{{ id }}' );
+            }
+        </script>
+    {% endif %}
+{%- endblock ckeditor_widget -%}
+
+{%- block button_widget -%}
+    {% set attr = attr|merge({class: (attr.class|default('btn-success') ~ ' btn')|trim}) %}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }}><i class="fa fa-save"></i>  {{ label|trans({}, translation_domain) }}</button>
+{%- endblock button_widget -%}
+
+{% macro widget_prototype(widget, remove_text) %}
+    {% if widget.get('prototype') %}
+        {% set form = widget.get('prototype') %}
+        {% set name = widget.get('prototype').get('name') %}
+    {% else %}
+        {% set form = widget %}
+        {% set name = widget.get('full_name') %}
+    {% endif %}
+
+    <div data-content="{{ name }}">
+        <a class="btn-remove" data-related="{{ name }}">{{ remove_text }}</a>
+        {{ form_widget(form) }}
+    </div>
+{% endmacro %}
+
+{%- block collection_widget -%}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
+    {% endif %}
+    <div {{ block('widget_attributes') }}>
+        <ul id="field-{{ id }}" class="media-list collection">
+            {% for i,item in form %}
+                <li class="media" id="campo-{{ id~'_'~i }}">
+                    <div class="media-body">
+                        {{ form_errors(item) }}
+                        {{ form_widget(item) }}
+                    </div>
+                    <div class="media-right">
+                        <button class="btn btn-default btn-xs close eliminar" type="button"><i class="fa fa-trash-o"></i></button>
+                        <button class="btn btn-default btn-xs close mover" type="button"><i class="fa fa-arrows"></i></button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form_errors(form) }}
+        <a href="#" class="btn btn-primary btn-sm collection-add">Agregar</a>
+    </div>
+{%- endblock collection_widget -%}
+
+{%- block filebrowser_widget -%}
+    {% spaceless %}
+    {%- set type = type|default('text') -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ 'hide form-control')|trim}) %}
+    <div class="media" id="t_{{ id }}">
+        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        <div class="media-left hide">
+            <img src="{{ asset(value) }}" alt="" />
+        </div>
+        <div class="media-body">
+            <p class="nombre-img {% if not value %}hide{% endif %}">{{ value|slice(8) }}</p>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default open-filebrowser" data-return="{{ id }}">
+                    <i class="fa fa-list"></i>
+                    <span class="hidden-xs"> Ver galería</span>
+                </button>
+                <button type="button" class="btn btn-default fancybox {% if not value or value|extension not in ['png','gif','jpg','jpeg'] %}hide{% endif %}" name="button" href="{% if value %}{{ asset(value) }}{% endif %}">
+                    <i class="fa fa-eye"></i>
+                </button>
+                <button type="button" class="btn btn-danger trash {% if not value %}hide{% endif %}" name="button" data-id="{{ id }}">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endspaceless %}
+{%- endblock -%}
+
+{% block form_widget_simple -%}
+    {{- parent() -}}
+    {% if attr.help_text is defined %}
+        <p class="help-block">{{ attr.help_text }}</p>
+    {% endif %}
+{%- endblock form_widget_simple %}
+
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+    {% if form.parent %}<span class="help-block">{% else %}<div class="alert alert-danger">{% endif %}
+    <ul class="list-unstyled">
+        {%- for error in errors -%}
+            <li><span class="fa fa-exclamation-circle"></span> {{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+    {% if form.parent %}</span>{% else %}</div>{% endif %}
+    {%- endif %}
+{%- endblock form_errors %}

@@ -1,0 +1,13 @@
+{% extends 'CoreZeroBundle:_common:_base_form.html.twig' %}
+
+{% block form_content -%}
+<div class="col-md-12">
+    <div class="box box-primary">
+        <div class="box-body">
+            {{ form_row(form.permanent, { 'label': '¿Permanente?' }) }}
+            {{ form_row(form.source, { 'label': 'Origen' }) }}
+            {{ form_row(form.destination, { 'label': 'Destino' }) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

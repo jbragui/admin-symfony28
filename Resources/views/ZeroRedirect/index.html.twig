@@ -1,0 +1,57 @@
+{% extends 'CoreZeroBundle:_common:_base_list.html.twig' %}
+
+{% block form_button %}
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="{{ path(ROUTER_NAME~'_new') }}">
+            <i class="fa fa-plus-circle"></i>
+            Agregar nuevo
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block form_content -%}
+<div class="box-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-hover DataTable">
+                <thead>
+                    <tr>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th width="50px" align="center">Permanente</th>
+                        <th width="50px" align="center">Visitas</th>
+                        <th width="150px" align="center">Último acceso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                    <tr>
+                        <td class="control-ajax">
+                            <a href="{{ path(ROUTER_NAME~'_edit', { 'id': entity.id }) }}">{{ entity.source }}</a>
+                        </td>
+                        <td>
+                            {{ entity.destination }}
+                        </td>
+                        <td align="center">
+                            {% if entity.permanent %}
+                                Si <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            {% else %}
+                                No <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td align="center">
+                            {{ entity.count }}
+                        </td>
+                        <td>
+                            {{ entity.lastAccessed|date('d-m-Y h:i:s') }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

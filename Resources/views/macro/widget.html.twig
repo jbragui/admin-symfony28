@@ -1,0 +1,22 @@
+{% macro tabs(bloques) %}
+    <div class="col-md-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs" role="tablist">
+                {% for row in bloques %}
+                    <li class="{% if loop.first %}active{% endif %}"><a href="#tab_bloque{{ loop.index }}" data-toggle="tab" aria-expanded="true">{{ row.0 }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for row in bloques %}
+                <div class="tab-pane fade {% if loop.first %}active in{% endif %}" id="tab_bloque{{ loop.index }}">
+                    <div class="box-body  container-fluid">
+                        <div class="row">
+                            {{ row.1 }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

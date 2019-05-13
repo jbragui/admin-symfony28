@@ -1,0 +1,104 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Iniciar sesión</title>
+
+        <link rel="stylesheet" href="{{ asset('bundles/corezero/css/login.css') }}">
+        <style media="screen">
+            .bg-danger{
+                padding: 10px 25px;
+            }
+        </style>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <!-- Top content -->
+        <div class="top-content">
+
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text staff">
+                            {% if zeroconfig.logo_interno != '' %}
+                                <img src="{{ asset(zeroconfig.logo_interno) }}" alt="">
+                            {% else %}
+                                <h1>staff<span style="color: #b0c41e;">{{ zeroconfig.title|lower }}</span></h1>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h3>Iniciar sesión</h3>
+                                    <p>
+                                        Complete su información:
+                                    </p>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                {% if error %}
+                                    <p class="bg-danger">{{ error|trans({}, 'FOSUserBundle') }}</p>
+                                {% endif %}
+                                <form class="login-form" action="{{ path("zerobundle_admin_security_check") }}" method="post">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                                    <div class="form-group">
+                                        <label class="sr-only" for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+                                        <input id="username" type="text" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}" value="{{ last_username }}" class="form-username form-control" name="_username" autofocus>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+                                        <input id="password" type="password" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" class="form-password form-control" name="_password">
+                                    </div>
+                                    <button class="btn" type="submit" id="_submit" name="_submit">
+                                        {{ 'security.login.submit'|trans }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Javascript -->
+        <script src="{{ asset('bundles/corezero/js/login.js') }}"></script>
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+            $.backstretch("{{ asset('bundles/corezero/img/wallpaper.jpg') }}");
+
+            $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
+                $(this).removeClass('input-error');
+            });
+
+            $('.login-form').on('submit', function(e) {
+                $(this).find('input[type="text"], input[type="password"], textarea').each(function(){
+                    if( $(this).val() == "" ) {
+                        e.preventDefault();
+                        $(this).addClass('input-error');
+                    }
+                    else {
+                        $(this).removeClass('input-error');
+                    }
+                });
+
+            });
+        });
+        </script>
+    </body>
+</html>

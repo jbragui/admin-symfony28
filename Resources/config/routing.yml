@@ -1,0 +1,25 @@
+zerobundle_admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin-staff
+
+zerobundle_admin_security_login:
+    pattern: /ingresar
+    defaults: { _controller: CoreZeroBundle:Security:login }
+    requirements:
+        _method: GET|POST
+
+zerobundle_admin_security_check:
+    pattern: /comprobar_ingreso
+    defaults: { _controller: CoreZeroBundle:Security:check }
+
+zerobundle_admin_security_logout:
+    pattern: /salir
+    defaults: { _controller: CoreZeroBundle:Security:logout }
+    requirements:
+        _method: GET|POST
+
+zerobundle_admin_api:
+    resource: "@CoreZeroBundle/Controller/"
+    type:     annotation
+    prefix:   /
