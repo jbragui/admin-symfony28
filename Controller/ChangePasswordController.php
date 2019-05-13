@@ -35,7 +35,7 @@ class ChangePasswordController extends Controller
 {
     /**
      * Change user password
-     * @Route("/admin-staff/change-password/", name="zerobundle_admin_changepassword")
+     * @Route("/admin/change-password/", name="zerobundle_admin_changepassword")
      * @Template("CoreZeroBundle:ChangePassword:changePassword.html.twig")
      */
     public function changePasswordAction(Request $request)

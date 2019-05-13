@@ -20,7 +20,7 @@ class ZeroSeo
     private $id;
 
     /**
-     * @ORM\Column(length=300)
+     * @ORM\Column(type="text")
      * @Assert\NotBlank()
      */
     private $path;
@@ -36,7 +36,7 @@ class ZeroSeo
     private $descripcion;
 
     /**
-     * @ORM\Column(length=150, nullable=true)
+     * @ORM\Column(length=160, nullable=true)
      */
     private $socialTitulo;
 
@@ -46,7 +46,7 @@ class ZeroSeo
     private $socialDescripcion;
 
     /**
-     * @ORM\Column(length=250, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $socialImagen;
 

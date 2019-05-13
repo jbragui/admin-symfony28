@@ -17,7 +17,7 @@ use Core\ZeroBundle\Helper\Filemanager;
 /**
 * API controller.
 *
-* @Route("/admin-staff/api")
+* @Route("/admin/api")
 */
 
 class ApiController extends Controller
