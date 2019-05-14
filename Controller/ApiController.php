@@ -17,7 +17,7 @@ use Core\ZeroBundle\Helper\Filemanager;
 /**
 * API controller.
 *
-* @Route("/admin-staff/api")
+* @Route("/admin/api")
 */
 
 class ApiController extends Controller
@@ -194,11 +194,11 @@ class ApiController extends Controller
 
                 $files[$k] = array(
                     'name' => $i['name'],
-                    'medidas' => $thumbnail['medidas'],
+                    'medidas' => $thumbnail ? $thumbnail['medidas'] : '',
                     'size' => $filemanager->human_filesize($i['size']),
                     'date' => date('Y-m-d H:i:s', $i['date']),
                     'folder' => False,
-                    'thumb' => $thumbnail['thumb'],
+                    'thumb' => $thumbnail ? $thumbnail['thumb'] : '',
                     'link' => $archivo
                 );
             }

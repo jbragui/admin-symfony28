@@ -1,7 +1,7 @@
 zerobundle_admin:
     resource: "@AdminBundle/Controller/"
     type:     annotation
-    prefix:   /admin-staff
+    prefix:   /admin
 
 zerobundle_admin_security_login:
     pattern: /ingresar
