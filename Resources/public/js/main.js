@@ -113,6 +113,7 @@ function update_collection_order() {
         });
     });
 }
+
 function id_existe_collection(name, id){
     var idname_1 = '#t_' + name + '_' + id;
     var idname_2 = '#' + name + '_' + id;
@@ -180,7 +181,8 @@ var myDropzone = new Dropzone("form#my-awesome-dropzone", { url: url_upload});
 if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
     CKEDITOR.tools.enableHtml5Elements( document );
 
-CKEDITOR.config.toolbar = [
+/* Original */
+/*CKEDITOR.config.toolbar = [
     { name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', '-', 'Templates' ] }, // Defines toolbar group with name (used to create voice label) and items in 3 subgroups.
     [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ],          // Defines toolbar group without name.
     '/',                                                                                    // Line break - next group will be placed in new line.
@@ -188,6 +190,15 @@ CKEDITOR.config.toolbar = [
     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
     { name: 'links', items: [ 'Link', 'Unlink' ] },
     { name: 'insert', items: [ 'Table', 'Youtube' ] }
+];*/
+
+/* Reducido */
+CKEDITOR.config.toolbar = [
+    [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ],          // Defines toolbar group without name.
+    '/',                                                                                    // Line break - next group will be placed in new line.
+    { name: 'basicstyles', items : [ 'Bold','Italic','-','Subscript','Superscript','-','RemoveFormat' ] },
+    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+    { name: 'links', items: [ 'Link', 'Unlink' ] }
 ];
 
 $(document).on('click', '.media-right .eliminar', function(){
