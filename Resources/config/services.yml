@@ -79,6 +79,10 @@ services:
         class: Core\ZeroBundle\Twig\GeoLocationExtension
         tags:
             - { name: twig.extension }
+    core.twig.extension.dias:
+        class: Core\ZeroBundle\Twig\DiasExtension
+        tags:
+            - { name: twig.extension }
     core.twig.extension.meses:
         class: Core\ZeroBundle\Twig\MesesExtension
         tags:
@@ -101,6 +105,18 @@ services:
         class: Core\ZeroBundle\Twig\SolonumerosExtension
         tags:
             - { name: twig.extension }
+    core.twig.extension.inarray:
+        class: Core\ZeroBundle\Twig\InarrayExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.inarrayassociative:
+        class: Core\ZeroBundle\Twig\InarrayassociativeExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.inarraycoincidencias:
+        class: Core\ZeroBundle\Twig\InarraycoincidenciasExtension
+        tags:
+            - { name: twig.extension }
     core.twig.extension.translate:
         class: Core\ZeroBundle\Twig\TranslateExtension
         arguments:
@@ -113,3 +129,16 @@ services:
             doctrine: "@doctrine"
         tags:
             - { name: twig.extension }
+    core.twig.extension.parimpar:
+        class: Core\ZeroBundle\Twig\ParimparExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.splitconteo:
+        class: Core\ZeroBundle\Twig\SplitconteoExtension
+        tags:
+            - { name: twig.extension }
+    core.twig.extension.split:
+        class: Core\ZeroBundle\Twig\SplitExtension
+        tags:
+            - { name: twig.extension }
+

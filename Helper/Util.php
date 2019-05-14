@@ -288,7 +288,7 @@ class Util
             'image/bmp',
             'image/ico',
             'image/svg+xml',
-            'application/svg+xml'
+            'application/svg+xml',
             
             'application/pdf'
         );
