@@ -13,7 +13,7 @@ use Core\ZeroBundle\Entity\ZeroSeo;
 use Core\ZeroBundle\Form\ZeroSeoType;
 
 /**
- * @Route("/admin/ZeroSeo")
+ * @Route("/admin-staff/ZeroSeo")
  */
 class ZeroSeoController extends Controller
 {

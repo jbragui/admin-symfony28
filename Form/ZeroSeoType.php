@@ -27,7 +27,7 @@ class ZeroSeoType extends AbstractType
             ))
             ->add('descripcion', TextType::class, array(
                 'attr' => array(
-                    'help_text' => 'Maximo de 160 caracteres'
+                    'help_text' => 'Maximo de 150 caracteres'
                 )
             ))
             ->add('socialTitulo')

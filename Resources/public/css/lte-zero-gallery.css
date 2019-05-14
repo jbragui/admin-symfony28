@@ -1,0 +1,107 @@
+.well-xs{
+    margin-bottom: 20px;
+}
+#filemanager tr td{
+    vertical-align: middle;
+}
+#filemanager tr td:nth-child(1) .fa{
+    width: 60px;
+    font-size: 50px;
+    color: #222d32;
+}
+#fancybox-loading{
+    margin-left: -150px;
+    margin-top: -150px;
+    /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+    -webkit-border-radius: 50%;
+
+    /* Firefox 1-3.6 */
+    -moz-border-radius: 50%;
+
+    /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+    border-radius: 50%;
+}
+#fancybox-loading,
+#fancybox-loading div{
+    width: 300px;
+    height: 300px;
+}
+#fancybox-loading div {
+    background: url('../img/loading.gif') center center no-repeat;
+}
+.user-menu>.dropdown-menu>li>a{
+    padding: 15px;
+}
+.media-left img{
+    max-width: 100px;
+}
+.dropzone{
+    background: white none repeat scroll 0 0;
+    border: 2px dashed #333;
+    border-radius: 5px;
+    padding: 54px;
+}
+button.close{
+    opacity: 0.5;
+    font-size: 15px;
+    width: 15px;
+    padding-bottom: 10px;
+}
+#form-bloque-botones{
+    height: 74px;
+}
+.fixed_footer .box{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #222d32;
+    margin: 0px -15px;
+    border-radius: 0px;
+    border-top: none;
+    box-shadow: none;
+    z-index: 999;
+}
+.fixed_footer .box .form-group{
+    margin: 0px;
+}
+#content-form h2{
+    margin-left: 15px;
+}
+.collection{
+    margin-bottom: 10px;
+}
+.collection > .media{
+    border: 1px solid #ddd;
+    padding: 15px 10px;
+    background: #fff;
+}
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ul.collection li.placeholder {
+  position: relative;
+}
+ul.collection li.placeholder:before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    margin-top: -5px;
+    left: -5px;
+    top: -4px;
+    border: 5px solid transparent;
+    border-left-color: red;
+    border-right: none;
+}
+.skin-black .main-header > .navbar .nav .open.lang > a{
+    background: #1e282c none repeat scroll 0 0;
+    color: #fff;
+}

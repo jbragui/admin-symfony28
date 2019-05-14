@@ -19,10 +19,7 @@
         "whiteoctober/tcpdf-bundle": "^1.0",
         "twig/extensions": "^1.3",
         "knplabs/knp-markdown-bundle": "~1.3",
-        "pixel418/markdownify": "^2.1",
-        "friendsofsymfony/user-bundle": "~1.3",
-        "zenstruck/redirect-bundle": "^3.0",
-        "tetranz/select2entity-bundle": "2.4"
+        "pixel418/markdownify": "^2.1"
     },
     "autoload": {
         "psr-4": { "Core\\ZeroBundle\\": "" }

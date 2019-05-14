@@ -2,9 +2,7 @@
 
 {%- block ckeditor_widget -%}
     <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
-    {% if attr.help_text is defined %}
-        <p class="help-block">{{ attr.help_text|markdown|replace({'<p>': '', '</p>': ''})|raw }}</p>
-    {% endif %}
+
     {% if attr.toolbar is defined and attr.toolbar != '' %}
         <script type="text/javascript">
             {% set toolbar = attr.toolbar == 'simple' ? '"Bold"':attr.toolbar %}
@@ -21,39 +19,6 @@
     {% endif %}
 {%- endblock ckeditor_widget -%}
 
-{%- block taggit_widget -%}
-    {% spaceless %}
-        {%- set type = type|default('text') -%}
-        {% set attr = attr|merge({class: (attr.class|default('') ~ ' hide form-control')|trim}) %}
-        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-        <select class="form-control select2_{{ id }}" multiple="true">
-            {% for item in value|default(',')|split(',') %}
-                {% if item != '' %}
-                <option value="{{ item|trim }}" selected="selected">{{ item|trim }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        {% if attr.help_text is defined %}
-            <p class="help-block">{{ attr.help_text|markdown|replace({'<p>': '', '</p>': ''})|raw }}</p>
-        {% endif %}
-        <script type="text/javascript">corezeroselect2('{{ id }}');</script>
-    {% endspaceless %}
-{%- endblock taggit_widget -%}
-
-{%- block choice_widget -%}
-    {% if expanded %}
-        {{- block('choice_widget_expanded') -}}
-    {% else %}
-        {{- block('choice_widget_collapsed') -}}
-    {% endif %}
-    <script type="text/javascript">
-        $('#{{ id }}').select2({
-            language: "es"
-        });
-        $(".select2-container--default").css('width', '100%');
-    </script>
-{%- endblock choice_widget -%}
-
 {%- block button_widget -%}
     {% set attr = attr|merge({class: (attr.class|default('btn-success') ~ ' btn')|trim}) %}
     {%- if label is empty -%}
@@ -69,102 +34,44 @@
     <button type="{{ type|default('button') }}" {{ block('button_attributes') }}><i class="fa fa-save"></i>  {{ label|trans({}, translation_domain) }}</button>
 {%- endblock button_widget -%}
 
-{% block collection_widget %}
-    {% spaceless %}
-        {% set boton1 = '<a href="#" class="collection-up btn btn-default" title="Move element up"><span class="fa fa-arrow-up"></span></a>' %}
-        {% set boton2 = '<a href="#" class="collection-down btn btn-default" title="Move element down"><span class="fa fa-arrow-down"></span></a>' %}
-        {% set boton3 = '<a href="#" class="collection-remove btn btn-default" title="Delete element"><span class="fa fa-trash"></span></a>' %}
-        {% set boton4 = '<a href="#" class="collection-add btn btn-default" title="Add element"><span class="fa fa-plus-circle"></span></a>' %}
-        {% set boton5 = '<a href="#" class="collection-duplicate btn btn-default" title="Duplicate element"><span class="fa fa-th-large"></span></a>' %}
-        {% set new_prototype = '<div class="row"><div class="col-md-9">'~form_widget(prototype)~'</div><div class="col-md-3">'~boton1~boton2~boton3~boton4~boton5~'</div></div>' %}
-
-        {% if prototype is defined %}
-            {% set attr = attr|merge({'data-prototype': new_prototype}) %}
-            {% set attr = attr|merge({'data-prototype-name': prototype.vars.name}) %}
-        {% endif %}
-
-        {% set attr = attr|merge({'data-allow-add': allow_add ? 1 : 0}) %}
-        {% set attr = attr|merge({'data-allow-remove': allow_delete ? 1 : 0 }) %}
-        {% set attr = attr|merge({'data-name-prefix': full_name}) %}
-        <div {{ block('widget_container_attributes') }} class="collection">
-            {{ block('collection_item_widget') }}
-            {{ form_rest(form) }}
-        </div>
-    {% endspaceless %}
-{% endblock collection_widget %}
-
-
-
-{% block collection_item_widget %}
-{% spaceless %}
-    {{ form_errors(form) }}
-    {% for child in form %}
-        <div class="row">
-            <div class="col-md-9">
-                {{ form_widget(child) }}
-            </div>
-            <div class="col-md-3">
-                <a href="#" class="collection-up btn btn-default" title="Move element up"><span class="fa fa-arrow-up"></span></a>
-                <a href="#" class="collection-down btn btn-default" title="Move element down"><span class="fa fa-arrow-down"></span></a>
-                <a href="#" class="collection-remove btn btn-default" title="Delete element"><span class="fa fa-trash"></span></a>
-                <a href="#" class="collection-add btn btn-default" title="Add element"><span class="fa fa-plus-circle"></span></a>
-                <a href="#" class="collection-duplicate btn btn-default" title="Duplicate element"><span class="fa fa-th-large"></span></a>
-            </div>
-        </div>
-    {% endfor %}
-{% endspaceless %}
-{% endblock collection_item_widget %}
-
-{% block datetime_widget -%}
-    {% if widget == 'single_text' %}
-        {{- block('form_widget_simple') -}}
-        <script type="text/javascript">corezerodatePicker('{{ id }}', '');</script>
-    {% else -%}
-        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
-        <div {{ block('widget_container_attributes') }}>
-            {{- form_errors(form.date) -}}
-            {{- form_errors(form.time) -}}
-            {{- form_widget(form.date, { datetime: true } ) -}}
-            {{- form_widget(form.time, { datetime: true } ) -}}
-        </div>
-    {%- endif %}
-{%- endblock datetime_widget %}
-
-{% block date_widget -%}
-    {% if widget == 'single_text' %}
-        {{- block('form_widget_simple') -}}
-        <script type="text/javascript">corezerodatePicker('{{ id }}','DD/MM/YYYY');</script>
-    {% else -%}
-        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
-        {% if datetime is not defined or not datetime -%}
-            <div {{ block('widget_container_attributes') -}}>
-        {%- endif %}
-            {{- date_pattern|replace({
-                '{{ year }}': form_widget(form.year),
-                '{{ month }}': form_widget(form.month),
-                '{{ day }}': form_widget(form.day),
-            })|raw -}}
-        {% if datetime is not defined or not datetime -%}
-            </div>
-        {%- endif -%}
+{% macro widget_prototype(widget, remove_text) %}
+    {% if widget.get('prototype') %}
+        {% set form = widget.get('prototype') %}
+        {% set name = widget.get('prototype').get('name') %}
+    {% else %}
+        {% set form = widget %}
+        {% set name = widget.get('full_name') %}
     {% endif %}
-{%- endblock date_widget %}
 
-{% block time_widget -%}
-    {% if widget == 'single_text' %}
-        {{- block('form_widget_simple') -}}
-        <script type="text/javascript">corezerodatePicker('{{ id }}', 'LT');</script>
-    {% else -%}
-        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
-        {% if datetime is not defined or false == datetime -%}
-            <div {{ block('widget_container_attributes') -}}>
-        {%- endif -%}
-        {{- form_widget(form.hour) }}{% if with_minutes %}:{{ form_widget(form.minute) }}{% endif %}{% if with_seconds %}:{{ form_widget(form.second) }}{% endif %}
-        {% if datetime is not defined or false == datetime -%}
-            </div>
-        {%- endif -%}
+    <div data-content="{{ name }}">
+        <a class="btn-remove" data-related="{{ name }}">{{ remove_text }}</a>
+        {{ form_widget(form) }}
+    </div>
+{% endmacro %}
+
+{%- block collection_widget -%}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
     {% endif %}
-{%- endblock time_widget %}
+    <div {{ block('widget_attributes') }}>
+        <ul id="field-{{ id }}" class="media-list collection listado-group-{{ id }}" data-id="{{ id }}">
+            {% for i,item in form %}
+                <li class="media" id="campo-{{ id~'_'~i }}">
+                    <div class="media-body">
+                        {{ form_errors(item) }}
+                        {{ form_widget(item) }}
+                    </div>
+                    <div class="media-right">
+                        <button class="btn btn-default btn-xs close eliminar" type="button"><i class="fa fa-trash-o"></i></button>
+                        <!-- <button class="btn btn-default btn-xs close mover" type="button"><i class="fa fa-arrows"></i></button> -->
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form_errors(form) }}
+        <a href="#" class="btn btn-primary btn-sm collection-add">Agregar</a>
+    </div>
+{%- endblock collection_widget -%}
 
 {%- block filebrowser_widget -%}
     {% spaceless %}
@@ -191,78 +98,7 @@
                 </button>
             </div>
         </div>
-        {% if attr.help_text is defined %}
-            <p class="help-block">{{ attr.help_text|markdown|replace({'<p>': '', '</p>': ''})|raw }}</p>
-        {% endif %}
     </div>
-    {% endspaceless %}
-{%- endblock -%}
-
-{%- block geolocation_widget -%}
-    {% spaceless %}
-    {%- set type = type|default('text') -%}
-    {% set attr = attr|merge({class: (attr.class|default('') ~ 'datamap hide form-control')|trim}) %}
-    <fieldset class="geo-{{ id }}">
-        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-        {% set datageo = value|geolocation %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="form-group">
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <input type="text" class="gllpSearchField form-control no-follow" placeholder="Buscar dirección..." value="{{ datageo.texto }}">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default gllpSearchButton" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div><!-- /input-group -->
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Latitud
-                            </span>
-                            <input type="text" class="form-control gllpLatitude" value="{{ datageo.latitud }}">
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Longitud
-                            </span>
-                            <input type="text" class="form-control gllpLongitude" value="{{ datageo.longitud }}">
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Zoom
-                            </span>
-                            <input type="number" class="form-control gllpZoom" value="{{ datageo.zoom }}">
-                            <span class="input-group-btn">
-                                <button type="button" name="button" class="btn btn-primary gllpUpdateButton">Actualizar mapa</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="gllpMap">Google Maps</div>
-            </div>
-        </div>
-        {% if attr.help_text is defined %}
-            <p class="help-block">{{ attr.help_text|markdown|replace({'<p>': '', '</p>': ''})|raw }}</p>
-        {% endif %}
-    </fieldset>
-    <script type="text/javascript">
-        setTimeout(function(){
-            $obj{{ id }} = $(document).gMapsLatLonPicker();
-            $obj{{ id }}.init( $('.geo-{{ id }}') );
-        }, 100);
-    </script>
     {% endspaceless %}
 {%- endblock -%}
 

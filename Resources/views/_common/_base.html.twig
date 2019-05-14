@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     {% set version_asset = '?v=1.13' %}
 
-    <link rel="stylesheet" href="{{ asset('bundles/corezero/css/total.css')~version_asset }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/corezero/css/all.min.css')~version_asset }}" rel="stylesheet" type="text/css"/>
 
     {% block css_adicional %}{% endblock %}
 
@@ -25,9 +25,7 @@
 
     <script src="{{ url('zerobundle_admin_api_main_js')~version_asset }}"></script>
     <script src="{{ asset('bundles/corezero/ckeditor/ckeditor.js')~version_asset }}"></script>
-    <script src="http://maps.googleapis.com/maps/api/js?key={{ zeroconfig.api_key_maps }}"></script>
     <script src="{{ asset('bundles/corezero/js/total.js')~version_asset }}"></script>
-    <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
 
     {% for row in zeroconfig.js_externo %}
     <script src="{{ row }}"></script>
@@ -38,13 +36,9 @@
 
     <div class="wrapper" id="page-wrap">
         <header class="main-header">
-            <a href="{{ path('zerobundle_admin_dashboard') }}" class="logo{% if zeroconfig.logo_interno != '' %} img{% endif %}">
-                {% if zeroconfig.logo_interno != '' %}
-                    <img src="{{ asset(zeroconfig.logo_interno) }}" alt="">
-                {% else %}
-                    <span class="logo-mini"><b>staff</b></span>
-                    <span class="logo-lg"><b>staff<span style="color: rgb(128,174,26);">{{ zeroconfig.title|lower }}</span></b></span>
-                {% endif %}
+            <a href="{{ path('zerobundle_admin_dashboard') }}" class="logo">
+                <span class="logo-mini"><b>staff</b></span>
+                <span class="logo-lg"><b>staff<span style="color: rgb(128,174,26);">{{ zeroconfig.title|lower }}</span></b></span>
             </a>
 
             <nav class="navbar navbar-static-top" role="navigation">
@@ -58,7 +52,7 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{{ asset('bundles/corezero/img/profile.jpg') }}" class="user-image" alt="User Image"/>
-                                <span class="hidden-xs">{{ app.user.username }}</span>
+                                <span class="hidden-xs">Administrador</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>

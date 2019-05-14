@@ -2,40 +2,57 @@
 
 namespace Core\ZeroBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class SecurityController extends ContainerAware
+class SecurityController extends Controller
 {
-    public function loginAction()
+    public function loginAction(Request $request)
     {
-        $request = $this->container->get('request');
-        /* @var $request \Symfony\Component\HttpFoundation\Request */
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
-        /* @var $session \Symfony\Component\HttpFoundation\Session\Session */
+
+        if (class_exists('\Symfony\Component\Security\Core\Security')) {
+            $authErrorKey = Security::AUTHENTICATION_ERROR;
+            $lastUsernameKey = Security::LAST_USERNAME;
+        } else {
+            // BC for SF < 2.6
+            $authErrorKey = SecurityContextInterface::AUTHENTICATION_ERROR;
+            $lastUsernameKey = SecurityContextInterface::LAST_USERNAME;
+        }
 
         // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has($authErrorKey)) {
+            $error = $request->attributes->get($authErrorKey);
+        } elseif (null !== $session && $session->has($authErrorKey)) {
+            $error = $session->get($authErrorKey);
+            $session->remove($authErrorKey);
         } else {
-            $error = '';
+            $error = null;
         }
 
-        if ($error) {
-            // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
-            $error = $error->getMessage();
+        if (!$error instanceof AuthenticationException) {
+            $error = null; // The value does not come from the security component.
         }
+
         // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
+        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
 
-        $csrfToken = $this->container->has('form.csrf_provider') ? $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate') : null;
+        if ($this->has('security.csrf.token_manager')) {
+            $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+        } else {
+            // BC for SF < 2.4
+            $csrfToken = $this->has('form.csrf_provider')
+                ? $this->get('form.csrf_provider')->generateCsrfToken('authenticate')
+                : null;
+        }
 
         return $this->renderLogin(array(
             'last_username' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
             'csrf_token' => $csrfToken,
         ));
     }
@@ -50,9 +67,7 @@ class SecurityController extends ContainerAware
      */
     protected function renderLogin(array $data)
     {
-        $template = sprintf('CoreZeroBundle:Security:login.html.%s', $this->container->getParameter('fos_user.template.engine'));
-
-        return $this->container->get('templating')->renderResponse($template, $data);
+        return $this->render('CoreZeroBundle:Security:login.html.twig', $data);
     }
 
     public function checkAction()

@@ -42,16 +42,10 @@
             {
                 $(window).ready(h).resize(h).scroll(h);
             });
-            $('.collection').collection({
-                up: '<a href="#" class="btn btn-default"><span class="fa fa-arrow-up"></span></a>',
-                down: '<a href="#" class="btn btn-default"><span class="fa fa-arrow-down"></span></a>',
-                add: '<a href="#" class="btn btn-default"><span class="fa fa-plus-circle"></span></a>',
-                remove: '<a href="#" class="btn btn-default"><span class="fa fa-trash"></span></a>'
-            });
-
+            load_sortable();
             setTimeout(function(){
                 $(window).ready(h).resize(h).scroll(h);
-            }, 100);
+            }, 300);
         }
         </script>
         {{ form_end(form) }}

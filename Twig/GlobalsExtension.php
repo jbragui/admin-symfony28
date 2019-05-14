@@ -49,8 +49,6 @@ class GlobalsExtension extends \Twig_Extension implements \Twig_Extension_Global
         );
 
         $this->locals['zeroconfig'] = array(
-            'api_key_maps' => (isset($admin_zero['api_key_maps'])) ? $admin_zero['api_key_maps']:'AIzaSyDSJTCObm-uFy0WUcLTpBQZ9zACGqv98hY',
-            'logo_interno' => @$admin_zero['logo_interno'],
             'title' => $admin_zero['developer'],
             'locales' => @$admin_zero['locales'],
             'js_externo' => @$admin_zero['js_externo'],
